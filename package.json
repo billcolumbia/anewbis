@@ -1,0 +1,14 @@
+{
+  "name": "anewbis",
+  "module": "index.js",
+  "type": "module",
+  "bin": {
+    "anewbis": "./index.js"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
