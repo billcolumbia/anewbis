@@ -1,15 +1,31 @@
 # anewbis
 
+This is a refactor of [billcolumbia/anubis](https://github.com/billcolumbia/anubis). It uses Bun instead of node. The only dependency is Bun. This is mostly a toy and not really made for anything fancy like HMR etc.
+
 To install dependencies:
 
 ```bash
-bun install
+bun install https://github.com/billcolumbia/anewbis
 ```
 
-To run:
+Add a script to your `package.json`. Anewbis takes a files param. This can be a single file or a glob. 
 
-```bash
-bun run index.js
+```json
+{
+  "scripts": {
+    "livereload": "anewbis --files='./src/**/*.{css,js,html,php}'"
+  }
+}
 ```
 
-This project was created using `bun init` in bun v1.1.18. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+Add the websocket client to your HTML. You will want some kind of logic to make sure this is only loaded in a dev environment.
+
+```html
+<html>
+  <!-- ... -->
+  <body>
+    <!-- ... -->
+    <script src="http://0.0.0.0:3000/live-reload.js"></script>
+  </body>
+<html>
+```
