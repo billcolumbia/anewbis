@@ -78,7 +78,7 @@ Bun.serve({
 
 Bun.serve({
   fetch(req) {
-    if (req.url === '/live-reload.js') {
+    if (req.url.includes(':3000/live-reload.js')) {
       return new Response(liveReloadClient, {
         headers: { 'Content-Type': 'application/javascript' },
       })
