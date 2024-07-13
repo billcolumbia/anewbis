@@ -1,9 +1,10 @@
 # anewbis
 
-This is a refactor of [billcolumbia/anubis](https://github.com/billcolumbia/anubis). It uses Bun instead of node. The only dependency is Bun. This is mostly a toy and not really made for anything fancy like HMR etc.
+Experimenting with a little bit of JavaScript or CSS? Joining the #nobuild team? Anewbis will watch for files chnages and inject CSS or reload the page for all other files.
 
-To install dependencies:
+This is a refactor of [billcolumbia/anubis](https://github.com/billcolumbia/anubis). It uses [Bun](https://bun.sh/) instead of node. The only dependency is Bun. This is mostly a toy.
 
+To install:
 ```bash
 bun install https://github.com/billcolumbia/anewbis
 ```

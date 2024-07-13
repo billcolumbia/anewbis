@@ -28,7 +28,7 @@ function now() {
   return new Date().toLocaleTimeString().replace(/\s*(AM|PM)/, '')
 }
 
-let liveReloadClient = Bun.file('./live-reload.js')
+let liveReloadClient = Bun.file(import.meta.dir + '/live-reload.js')
 let filesToWatch = new Glob(values.files)
 let connections = []
 
