@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+
 import { watch } from 'fs'
 import { parseArgs } from 'util'
 import { Glob } from 'bun'
@@ -10,51 +11,57 @@ const BLUE = (text) => COLORIZE(`34m${text}`)
 const CYAN = (text) => COLORIZE(`36m${text}`)
 const DIM = (text) => COLORIZE(`2m${text}`)
 
+function now() {
+  return new Date().toLocaleTimeString().replace(/\s*(AM|PM)/, '')
+}
+
 const { values } = parseArgs({
   args: Bun.argv,
   options: {
     files: {
       type: 'string',
     },
+    port: {
+      type: 'string',
+      default: '3000',
+    },
   },
   strict: true,
   allowPositionals: true,
 })
 
-if (!values.files)
+if (!values.files) {
   throw new Error('Missing files parameter in Anewbis command.')
-
-function now() {
-  return new Date().toLocaleTimeString().replace(/\s*(AM|PM)/, '')
 }
 
+let filesToWatch = values.files.split(';').map((files) => new Glob(files))
 let liveReloadClient = Bun.file(import.meta.dir + '/live-reload.js')
-let filesToWatch = new Glob(values.files)
 let connections = []
 
-for await (let file of filesToWatch.scan('.')) {
-  watch(file, (event, filename) => {
-    connections.forEach((ws) => {
-      log(
-        DIM(now()),
-        CYAN(`[change]`),
-        BLUE(filename),
-        DIM('Reloading or injecting!')
-      )
-      ws.send(
-        JSON.stringify({
-          event,
-          filename,
-          ext: filename.split('.')[1],
-        })
-      )
+filesToWatch.forEach(async (files) => {
+  for await (let file of files.scan('.')) {
+    watch(file, (event, filename) => {
+      connections.forEach((ws) => {
+        log(
+          DIM(now()),
+          CYAN(`[change]`),
+          BLUE(filename),
+          DIM('Reloading or injecting!')
+        )
+        ws.send(
+          JSON.stringify({
+            event,
+            filename,
+            ext: filename.split('.')[1],
+          })
+        )
+      })
     })
-  })
-}
+  }
+})
 
 Bun.serve({
-  port: 5555,
-  hostname: '0.0.0.0',
+  port: 3001,
   fetch(req, server) {
     if (server.upgrade(req)) {
       return
@@ -77,6 +84,7 @@ Bun.serve({
 })
 
 Bun.serve({
+  port: values.port,
   fetch(req) {
     if (req.url.includes(':3000/live-reload.js')) {
       return new Response(liveReloadClient, {

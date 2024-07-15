@@ -1,4 +1,4 @@
-let socket = new WebSocket('ws://localhost:5555')
+let socket = new WebSocket('ws://localhost:3001')
 
 socket.addEventListener('open', (e) => {
   console.log('Connected to the live reload watcher')
